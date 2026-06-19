@@ -1,7 +1,16 @@
+import FileUpload from './components/FileUpload'
+
 function App() {
+  const handleUploadSuccess = (data) => {
+    console.log('Upload successful:', data)
+  }
+
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center">
-      <h1 className="text-4xl font-bold text-white">DataForge Dashboard</h1>
+    <div className="min-h-screen bg-gray-900 py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        <h1 className="text-4xl font-bold text-white text-center mb-8">DataForge Dashboard</h1>
+        <FileUpload onUploadSuccess={handleUploadSuccess} />
+      </div>
     </div>
   )
 }
