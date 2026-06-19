@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react'
+import axios from 'axios'
 
 export default function FileUpload({ onUploadSuccess }) {
   const [selectedFile, setSelectedFile] = useState(null)
@@ -76,25 +77,26 @@ export default function FileUpload({ onUploadSuccess }) {
     setError('')
 
     try {
-      // Placeholder for API call
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 1500))
+      const formData = new FormData()
+      formData.append('file', selectedFile)
 
-      // Mock response data
-      const mockData = {
-        filename: selectedFile.name,
-        row_count: 100,
-        column_count: 5,
-        columns: ['col1', 'col2', 'col3', 'col4', 'col5'],
-        numeric_columns: ['col2', 'col4'],
-        preview: [],
-        summary_stats: {}
-      }
+      const response = await axios.post('http://localhost:8000/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
 
-      onUploadSuccess(mockData)
+      onUploadSuccess(response.data)
       setSelectedFile(null)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
     } catch (err) {
-      setError(err.message || 'Failed to upload file')
+      if (err.response && err.response.data && err.response.data.detail) {
+        setError(err.response.data.detail)
+      } else {
+        setError(err.message || 'Failed to upload file')
+      }
     } finally {
       setIsLoading(false)
     }
