@@ -3,9 +3,12 @@ import FileUpload from './components/FileUpload'
 import DataTable from './components/DataTable'
 import StatsPanel from './components/StatsPanel'
 import BarChart from './components/BarChart'
+import LineChart from './components/LineChart'
+import PieChart from './components/PieChart'
 
 function App() {
   const [uploadedData, setUploadedData] = useState(null)
+  const [activeChart, setActiveChart] = useState('bar')
 
   const handleUploadSuccess = (data) => {
     console.log('Upload successful:', data)
@@ -92,11 +95,64 @@ function App() {
           {/* Data Visualisation Section */}
           {uploadedData && (
             <div className="mb-12">
-              <BarChart
-                data={uploadedData.preview}
-                columns={uploadedData.columns}
-                numericColumns={uploadedData.numeric_columns}
-              />
+              <h2 className="text-2xl font-bold text-white mb-6">Data Visualisation</h2>
+
+              {/* Chart Toggle Buttons */}
+              <div className="flex gap-2 mb-6">
+                <button
+                  onClick={() => setActiveChart('bar')}
+                  className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                    activeChart === 'bar'
+                      ? 'bg-indigo-500 text-white'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                  }`}
+                >
+                  Bar Chart
+                </button>
+                <button
+                  onClick={() => setActiveChart('line')}
+                  className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                    activeChart === 'line'
+                      ? 'bg-indigo-500 text-white'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                  }`}
+                >
+                  Line Chart
+                </button>
+                <button
+                  onClick={() => setActiveChart('pie')}
+                  className={`px-4 py-2 rounded-md font-medium text-sm transition-colors ${
+                    activeChart === 'pie'
+                      ? 'bg-indigo-500 text-white'
+                      : 'bg-gray-800 text-gray-400 hover:bg-gray-700'
+                  }`}
+                >
+                  Pie Chart
+                </button>
+              </div>
+
+              {/* Chart Display */}
+              {activeChart === 'bar' && (
+                <BarChart
+                  data={uploadedData.preview}
+                  columns={uploadedData.columns}
+                  numericColumns={uploadedData.numeric_columns}
+                />
+              )}
+              {activeChart === 'line' && (
+                <LineChart
+                  data={uploadedData.preview}
+                  columns={uploadedData.columns}
+                  numericColumns={uploadedData.numeric_columns}
+                />
+              )}
+              {activeChart === 'pie' && (
+                <PieChart
+                  data={uploadedData.preview}
+                  columns={uploadedData.columns}
+                  numericColumns={uploadedData.numeric_columns}
+                />
+              )}
             </div>
           )}
         </div>
