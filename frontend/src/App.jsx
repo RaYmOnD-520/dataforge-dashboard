@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import FileUpload from './components/FileUpload'
 import DataTable from './components/DataTable'
+import StatsPanel from './components/StatsPanel'
 
 function App() {
   const [uploadedData, setUploadedData] = useState(null)
@@ -77,6 +78,13 @@ function App() {
           {uploadedData && (
             <div className="mb-12">
               <DataTable data={uploadedData.preview} columns={uploadedData.columns} />
+            </div>
+          )}
+
+          {/* Column Statistics Section */}
+          {uploadedData && (
+            <div className="mb-12">
+              <StatsPanel stats={uploadedData.summary_stats} />
             </div>
           )}
         </div>
