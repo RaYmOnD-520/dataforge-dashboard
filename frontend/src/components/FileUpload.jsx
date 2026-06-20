@@ -136,9 +136,9 @@ export default function FileUpload({ onUploadSuccess }) {
         />
 
         {!selectedFile ? (
-          <div className="text-center">
+          <div className="text-center flex flex-col items-center justify-center">
             <svg
-              className="mx-auto h-12 w-12 text-gray-400"
+              className="mx-auto h-12 w-12 text-gray-400 mb-6"
               stroke="currentColor"
               fill="none"
               viewBox="0 0 48 48"
@@ -151,17 +151,15 @@ export default function FileUpload({ onUploadSuccess }) {
                 strokeLinejoin="round"
               />
             </svg>
-            <div className="mt-4 flex text-sm leading-6 text-gray-400">
-              <button
-                type="button"
-                onClick={handleBrowseClick}
-                className="relative cursor-pointer rounded-md font-semibold text-indigo-400 hover:text-indigo-300 focus:outline-none"
-              >
-                Upload a file
-              </button>
-              <p className="pl-1">or drag and drop</p>
-            </div>
-            <p className="text-xs leading-5 text-gray-500 mt-2">CSV files only</p>
+            <button
+              type="button"
+              onClick={handleBrowseClick}
+              className="px-6 py-2 bg-indigo-500 text-white font-medium rounded-md hover:bg-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
+            >
+              Choose CSV File
+            </button>
+            <p className="text-sm text-gray-400 mt-3">or drag and drop</p>
+            <p className="text-xs text-gray-500 mt-2">CSV files only</p>
           </div>
         ) : (
           <div className="text-center">
