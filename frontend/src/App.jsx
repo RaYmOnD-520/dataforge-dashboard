@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import FileUpload from './components/FileUpload'
+import DataTable from './components/DataTable'
 
 function App() {
   const [uploadedData, setUploadedData] = useState(null)
@@ -37,6 +38,10 @@ function App() {
                 <div className="text-sm text-gray-400 mb-2">Filename</div>
                 <div className="text-lg font-semibold text-white truncate">{uploadedData.filename}</div>
               </div>
+            </div>
+
+            <div className="mt-8">
+              <DataTable data={uploadedData.preview} columns={uploadedData.columns} />
             </div>
           </div>
         )}
