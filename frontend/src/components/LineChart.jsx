@@ -33,7 +33,7 @@ export default function LineChart({ data, columns, numericColumns }) {
   // SVG dimensions and padding
   const svgWidth = 720
   const svgHeight = 300
-  const padX = 40
+  const padX = 0
   const padY = 36
 
   // Calculate plot area
@@ -99,7 +99,7 @@ export default function LineChart({ data, columns, numericColumns }) {
 
       <div className="rounded-lg" style={{
         marginTop: '16px',
-        padding: '24px 0 16px 0',
+        padding: '24px 16px 16px 16px',
         background: 'linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0.008))',
         border: '1px solid rgba(255,255,255,0.07)'
       }}>
