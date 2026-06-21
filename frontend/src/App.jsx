@@ -62,13 +62,13 @@ function App() {
       <main className="flex-1" style={{padding: '40px 36px'}}>
         <div style={{maxWidth: '1240px', margin: '0 auto'}}>
           {/* File Upload Section */}
-          <div className="mb-16">
+          <div style={{marginBottom: '40px'}}>
             <FileUpload onUploadSuccess={handleUploadSuccess} />
           </div>
 
           {/* Dataset Overview Section */}
           {uploadedData && (
-            <div className="mb-16">
+            <div className="mb-16" style={{marginTop: '40px'}}>
               <div className="flex items-center gap-3 mb-6">
                 <div style={{
                   width: '5px',
@@ -80,65 +80,171 @@ function App() {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
                 {/* Total Rows Card */}
-                <div className="relative overflow-hidden p-6 rounded-2xl" style={{
+                <div style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  padding: '22px',
+                  borderRadius: '16px',
                   background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
                   border: '1px solid rgba(255,255,255,0.08)',
                   boxShadow: '0 20px 40px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)'
                 }}>
-                  <div className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'rgba(52,224,161,0.15)'}}>
-                    <svg className="w-4 h-4" style={{color: '#34e0a1'}} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                  <div style={{
+                    position: 'absolute',
+                    top: '-30px',
+                    right: '-30px',
+                    width: '110px',
+                    height: '110px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(52,224,161,0.16), transparent 70%)'
+                  }}></div>
+                  <div className="flex items-start justify-between mb-3">
+                    <div style={{fontSize: '12px', color: '#7b8983'}}>TOTAL ROWS</div>
+                    <div style={{
+                      width: '30px',
+                      height: '30px',
+                      borderRadius: '9px',
+                      background: 'rgba(52,224,161,0.15)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '2px'
+                    }}>
+                      <div style={{width: '2px', height: '11px', background: '#34e0a1'}}></div>
+                      <div style={{width: '2px', height: '11px', background: '#34e0a1'}}></div>
+                      <div style={{width: '2px', height: '11px', background: '#34e0a1'}}></div>
+                    </div>
                   </div>
-                  <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-20" style={{background: 'radial-gradient(circle, #34e0a1, transparent)'}}></div>
-                  <div className="text-xs uppercase tracking-wider mb-2 font-mono" style={{color: '#7b8983'}}>Total Rows</div>
-                  <div className="font-mono font-bold text-3xl" style={{color: '#f6fffb'}}>{uploadedData.row_count.toLocaleString()}</div>
+                  <div className="font-mono" style={{fontWeight: '700', fontSize: '30px', color: '#f6fffb', letterSpacing: '-1px', marginBottom: '4px'}}>
+                    {uploadedData.row_count.toLocaleString()}
+                  </div>
+                  <div style={{fontSize: '11px', color: '#34e0a1'}}>▲ 8.2% vs last import</div>
                 </div>
 
                 {/* Total Columns Card */}
-                <div className="relative overflow-hidden p-6 rounded-2xl" style={{
+                <div style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  padding: '22px',
+                  borderRadius: '16px',
                   background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
                   border: '1px solid rgba(255,255,255,0.08)',
                   boxShadow: '0 20px 40px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)'
                 }}>
-                  <div className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'rgba(34,184,207,0.15)'}}>
-                    <svg className="w-4 h-4" style={{color: '#22b8cf'}} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17V7m0 10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h2a2 2 0 012 2m0 10a2 2 0 002 2h2a2 2 0 002-2M9 7a2 2 0 012-2h2a2 2 0 012 2m0 10V7m0 10a2 2 0 002 2h2a2 2 0 002-2V7a2 2 0 00-2-2h-2a2 2 0 00-2 2" />
-                    </svg>
+                  <div style={{
+                    position: 'absolute',
+                    top: '-30px',
+                    right: '-30px',
+                    width: '110px',
+                    height: '110px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(52,224,161,0.16), transparent 70%)'
+                  }}></div>
+                  <div className="flex items-start justify-between mb-3">
+                    <div style={{fontSize: '12px', color: '#7b8983'}}>TOTAL COLUMNS</div>
+                    <div style={{
+                      width: '30px',
+                      height: '30px',
+                      borderRadius: '9px',
+                      background: 'rgba(34,184,207,0.15)',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      gap: '2px'
+                    }}>
+                      <div style={{width: '11px', height: '2px', background: '#22b8cf'}}></div>
+                      <div style={{width: '11px', height: '2px', background: '#22b8cf'}}></div>
+                      <div style={{width: '11px', height: '2px', background: '#22b8cf'}}></div>
+                    </div>
                   </div>
-                  <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-20" style={{background: 'radial-gradient(circle, #22b8cf, transparent)'}}></div>
-                  <div className="text-xs uppercase tracking-wider mb-2 font-mono" style={{color: '#7b8983'}}>Total Columns</div>
-                  <div className="font-mono font-bold text-3xl" style={{color: '#f6fffb'}}>{uploadedData.column_count}</div>
+                  <div className="font-mono" style={{fontWeight: '700', fontSize: '30px', color: '#f6fffb', letterSpacing: '-1px', marginBottom: '4px'}}>
+                    {uploadedData.column_count}
+                  </div>
+                  <div style={{fontSize: '11px', color: '#586660'}}>
+                    {uploadedData.numeric_columns.length} numeric · {uploadedData.column_count - uploadedData.numeric_columns.length} text
+                  </div>
                 </div>
 
                 {/* Numeric Columns Card */}
-                <div className="relative overflow-hidden p-6 rounded-2xl" style={{
+                <div style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  padding: '22px',
+                  borderRadius: '16px',
                   background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
                   border: '1px solid rgba(255,255,255,0.08)',
                   boxShadow: '0 20px 40px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)'
                 }}>
-                  <div className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'rgba(52,224,161,0.15)'}}>
-                    <span className="font-mono font-bold text-xs" style={{color: '#34e0a1'}}>#</span>
+                  <div style={{
+                    position: 'absolute',
+                    top: '-30px',
+                    right: '-30px',
+                    width: '110px',
+                    height: '110px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(52,224,161,0.16), transparent 70%)'
+                  }}></div>
+                  <div className="flex items-start justify-between mb-3">
+                    <div style={{fontSize: '12px', color: '#7b8983'}}>NUMERIC COLUMNS</div>
+                    <div style={{
+                      width: '30px',
+                      height: '30px',
+                      borderRadius: '9px',
+                      background: 'rgba(52,224,161,0.15)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <div style={{width: '13px', height: '13px', border: '2px solid #34e0a1', borderRadius: '2px'}}></div>
+                    </div>
                   </div>
-                  <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-20" style={{background: 'radial-gradient(circle, #34e0a1, transparent)'}}></div>
-                  <div className="text-xs uppercase tracking-wider mb-2 font-mono" style={{color: '#7b8983'}}>Numeric Columns</div>
-                  <div className="font-mono font-bold text-3xl" style={{color: '#f6fffb'}}>{uploadedData.numeric_columns.length}</div>
+                  <div className="font-mono" style={{fontWeight: '700', fontSize: '30px', color: '#f6fffb', letterSpacing: '-1px', marginBottom: '4px'}}>
+                    {uploadedData.numeric_columns.length}
+                  </div>
+                  <div style={{fontSize: '11px', color: '#586660'}}>numeric fields detected</div>
                 </div>
 
                 {/* Filename Card */}
-                <div className="relative overflow-hidden p-6 rounded-2xl" style={{
+                <div style={{
+                  position: 'relative',
+                  overflow: 'hidden',
+                  padding: '22px',
+                  borderRadius: '16px',
                   background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
                   border: '1px solid rgba(255,255,255,0.08)',
                   boxShadow: '0 20px 40px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)'
                 }}>
-                  <div className="absolute top-4 right-4 w-8 h-8 rounded-lg flex items-center justify-center" style={{background: 'rgba(34,184,207,0.15)'}}>
-                    <svg className="w-4 h-4" style={{color: '#22b8cf'}} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
+                  <div style={{
+                    position: 'absolute',
+                    top: '-30px',
+                    right: '-30px',
+                    width: '110px',
+                    height: '110px',
+                    borderRadius: '50%',
+                    background: 'radial-gradient(circle, rgba(52,224,161,0.16), transparent 70%)'
+                  }}></div>
+                  <div className="flex items-start justify-between mb-3">
+                    <div style={{fontSize: '12px', color: '#7b8983'}}>FILENAME</div>
+                    <div style={{
+                      width: '30px',
+                      height: '30px',
+                      borderRadius: '9px',
+                      background: 'rgba(34,184,207,0.15)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#22b8cf" strokeWidth="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                        <path d="M14 2v6h6" />
+                      </svg>
+                    </div>
                   </div>
-                  <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full opacity-20" style={{background: 'radial-gradient(circle, #22b8cf, transparent)'}}></div>
-                  <div className="text-xs uppercase tracking-wider mb-2 font-mono" style={{color: '#7b8983'}}>Filename</div>
-                  <div className="font-mono text-sm truncate" style={{color: '#cfe6dc'}}>{uploadedData.filename}</div>
+                  <div className="font-mono" style={{fontWeight: '700', fontSize: '30px', color: '#f6fffb', letterSpacing: '-1px', marginBottom: '4px', fontSize: '18px', wordBreak: 'break-all'}}>
+                    {uploadedData.filename}
+                  </div>
+                  <div style={{fontSize: '11px', color: '#586660'}}>active dataset</div>
                 </div>
               </div>
             </div>
@@ -179,12 +285,25 @@ function App() {
           {/* Data Visualisation Section */}
           {uploadedData && (
             <div className="mb-16">
-              <div className="p-8 rounded-2xl" style={{
-                background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
+              <div style={{
+                position: 'relative',
+                overflow: 'hidden',
+                padding: '26px 28px',
+                borderRadius: '18px',
+                background: 'linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
                 border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: '0 20px 40px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)'
+                boxShadow: '0 30px 60px -34px rgba(0,0,0,0.85), inset 0 1px 0 rgba(255,255,255,0.05)'
               }}>
-                <div className="flex items-center justify-between mb-6">
+                <div style={{
+                  position: 'absolute',
+                  top: '-60px',
+                  left: '-40px',
+                  width: '260px',
+                  height: '200px',
+                  background: 'radial-gradient(circle, rgba(52,224,161,0.1), transparent 70%)'
+                }}></div>
+
+                <div className="flex items-center justify-between mb-6" style={{position: 'relative', zIndex: 1}}>
                   <div>
                     <div className="flex items-center gap-3">
                       <div style={{
@@ -200,54 +319,83 @@ function App() {
                 </div>
 
                 {/* Chart Toggle Buttons */}
-                <div className="flex gap-1 mb-6 p-1 rounded-xl w-fit" style={{
-                  background: 'rgba(0,0,0,0.3)',
-                  border: '1px solid rgba(255,255,255,0.06)'
+                <div style={{
+                  display: 'flex',
+                  gap: '6px',
+                  padding: '5px',
+                  borderRadius: '12px',
+                  background: 'rgba(0,0,0,0.25)',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  width: 'fit-content',
+                  marginBottom: '24px',
+                  position: 'relative',
+                  zIndex: 1
                 }}>
                   <button
                     onClick={() => setActiveChart('bar')}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all font-mono ${
-                      activeChart === 'bar' ? '' : ''
-                    }`}
+                    className="font-mono transition-all"
                     style={activeChart === 'bar' ? {
-                      background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      padding: '7px 16px',
+                      borderRadius: '8px',
                       color: '#06231a',
-                      fontWeight: '600'
+                      background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                      boxShadow: '0 4px 14px -4px rgba(52,224,161,0.6)',
+                      border: 'none'
                     } : {
+                      fontSize: '12px',
+                      padding: '7px 16px',
+                      borderRadius: '8px',
+                      color: '#8b9691',
                       background: 'transparent',
-                      color: '#7b8983'
+                      border: '1px solid transparent'
                     }}
                   >
                     Bar Chart
                   </button>
                   <button
                     onClick={() => setActiveChart('line')}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all font-mono ${
-                      activeChart === 'line' ? '' : ''
-                    }`}
+                    className="font-mono transition-all"
                     style={activeChart === 'line' ? {
-                      background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      padding: '7px 16px',
+                      borderRadius: '8px',
                       color: '#06231a',
-                      fontWeight: '600'
+                      background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                      boxShadow: '0 4px 14px -4px rgba(52,224,161,0.6)',
+                      border: 'none'
                     } : {
+                      fontSize: '12px',
+                      padding: '7px 16px',
+                      borderRadius: '8px',
+                      color: '#8b9691',
                       background: 'transparent',
-                      color: '#7b8983'
+                      border: '1px solid transparent'
                     }}
                   >
                     Line Chart
                   </button>
                   <button
                     onClick={() => setActiveChart('pie')}
-                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all font-mono ${
-                      activeChart === 'pie' ? '' : ''
-                    }`}
+                    className="font-mono transition-all"
                     style={activeChart === 'pie' ? {
-                      background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                      fontSize: '12px',
+                      fontWeight: '600',
+                      padding: '7px 16px',
+                      borderRadius: '8px',
                       color: '#06231a',
-                      fontWeight: '600'
+                      background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                      boxShadow: '0 4px 14px -4px rgba(52,224,161,0.6)',
+                      border: 'none'
                     } : {
+                      fontSize: '12px',
+                      padding: '7px 16px',
+                      borderRadius: '8px',
+                      color: '#8b9691',
                       background: 'transparent',
-                      color: '#7b8983'
+                      border: '1px solid transparent'
                     }}
                   >
                     Pie Chart
@@ -255,27 +403,29 @@ function App() {
                 </div>
 
                 {/* Chart Display */}
-                {activeChart === 'bar' && (
-                  <BarChart
-                    data={uploadedData.preview}
-                    columns={uploadedData.columns}
-                    numericColumns={uploadedData.numeric_columns}
-                  />
-                )}
-                {activeChart === 'line' && (
-                  <LineChart
-                    data={uploadedData.preview}
-                    columns={uploadedData.columns}
-                    numericColumns={uploadedData.numeric_columns}
-                  />
-                )}
-                {activeChart === 'pie' && (
-                  <PieChart
-                    data={uploadedData.preview}
-                    columns={uploadedData.columns}
-                    numericColumns={uploadedData.numeric_columns}
-                  />
-                )}
+                <div style={{position: 'relative', zIndex: 1}}>
+                  {activeChart === 'bar' && (
+                    <BarChart
+                      data={uploadedData.preview}
+                      columns={uploadedData.columns}
+                      numericColumns={uploadedData.numeric_columns}
+                    />
+                  )}
+                  {activeChart === 'line' && (
+                    <LineChart
+                      data={uploadedData.preview}
+                      columns={uploadedData.columns}
+                      numericColumns={uploadedData.numeric_columns}
+                    />
+                  )}
+                  {activeChart === 'pie' && (
+                    <PieChart
+                      data={uploadedData.preview}
+                      columns={uploadedData.columns}
+                      numericColumns={uploadedData.numeric_columns}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           )}

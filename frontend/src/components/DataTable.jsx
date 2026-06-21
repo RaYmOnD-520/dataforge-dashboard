@@ -12,24 +12,34 @@ export default function DataTable({ data, columns }) {
 
   return (
     <div className="w-full">
-      <div className="overflow-x-auto rounded-2xl df-scroll" style={{
-        background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
-        border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 20px 40px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)'
-      }}>
-        <table className="w-full">
+      <div
+        className="df-scroll"
+        style={{
+          overflowX: 'auto',
+          borderRadius: '16px',
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(155deg, rgba(255,255,255,0.035), rgba(255,255,255,0.008))',
+          boxShadow: '0 20px 50px -28px rgba(0,0,0,0.8)'
+        }}
+      >
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '760px' }}>
           <thead style={{
-            background: 'linear-gradient(180deg, rgba(52,224,161,0.1), rgba(52,224,161,0.02))',
-            borderBottom: '1px solid rgba(52,224,161,0.2)'
+            background: 'linear-gradient(180deg, rgba(52,224,161,0.1), rgba(52,224,161,0.02))'
           }}>
             <tr>
               {columns.map((column, index) => (
                 <th
                   key={index}
-                  className="px-5 py-4 text-left font-mono text-xs font-semibold whitespace-nowrap uppercase"
+                  className="font-mono"
                   style={{
+                    textAlign: 'left',
+                    padding: '14px 18px',
+                    fontSize: '11px',
+                    fontWeight: '600',
+                    letterSpacing: '0.6px',
                     color: '#34e0a1',
-                    letterSpacing: '0.6px'
+                    borderBottom: '1px solid rgba(52,224,161,0.2)',
+                    textTransform: 'uppercase'
                   }}
                 >
                   {column}
@@ -51,8 +61,12 @@ export default function DataTable({ data, columns }) {
                   return (
                     <td
                       key={colIndex}
-                      className={`px-5 py-4 font-mono text-sm whitespace-nowrap ${isNum ? 'text-right' : 'text-left'}`}
-                      style={{color: '#e6f3ec'}}
+                      className="font-mono"
+                      style={{
+                        padding: '13px 18px',
+                        fontSize: '13px',
+                        color: '#e6f3ec'
+                      }}
                     >
                       {value !== null && value !== undefined ? String(value) : '—'}
                     </td>
@@ -63,7 +77,7 @@ export default function DataTable({ data, columns }) {
           </tbody>
         </table>
       </div>
-      <p className="text-xs font-mono mt-3" style={{color: '#586660'}}>
+      <p className="font-mono" style={{fontSize: '12px', color: '#586660', marginTop: '12px'}}>
         Showing {previewData.length} of {data.length} rows
       </p>
     </div>

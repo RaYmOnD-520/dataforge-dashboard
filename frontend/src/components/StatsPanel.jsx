@@ -5,14 +5,18 @@ export default function StatsPanel({ stats }) {
 
   const columns = Object.keys(stats)
 
-  // Generate random heights for sparkline bars
+  // Generate random heights for sparkline bars (between 20% and 100%)
   const generateSparkline = () => {
-    return Array.from({ length: 12 }, () => Math.random() * 100)
+    return Array.from({ length: 12 }, () => 20 + Math.random() * 80)
   }
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: columns.length < 4 ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+        gap: '18px'
+      }}>
         {columns.map((column, idx) => {
           const columnStats = stats[column]
           const sparklineData = generateSparkline()
@@ -21,66 +25,84 @@ export default function StatsPanel({ stats }) {
           return (
             <div
               key={column}
-              className="relative overflow-hidden p-5 rounded-2xl"
               style={{
-                background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
+                padding: '20px',
+                borderRadius: '16px',
+                background: 'linear-gradient(155deg, rgba(255,255,255,0.045), rgba(255,255,255,0.01))',
                 border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: '0 20px 40px -24px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)'
+                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)'
               }}
             >
-              {/* Column name and badge */}
+              {/* Header row: column name + data type badge */}
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-mono font-semibold text-sm truncate" style={{color: '#f5fbf8'}}>
+                <h3 className="font-mono" style={{fontSize: '13px', color: '#e6f3ec', fontWeight: '500', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '8px'}}>
                   {column}
                 </h3>
-                <span className="px-2 py-0.5 rounded font-mono text-xs" style={{
-                  background: isEmerald ? 'rgba(52,224,161,0.15)' : 'rgba(34,184,207,0.15)',
-                  color: isEmerald ? '#34e0a1' : '#22b8cf'
-                }}>
+                <span
+                  className="font-mono"
+                  style={{
+                    fontSize: '10px',
+                    padding: '3px 7px',
+                    borderRadius: '5px',
+                    background: isEmerald ? 'rgba(52,224,161,0.1)' : 'rgba(34,184,207,0.1)',
+                    border: `1px solid ${isEmerald ? 'rgba(52,224,161,0.2)' : 'rgba(34,184,207,0.2)'}`,
+                    color: isEmerald ? '#34e0a1' : '#22b8cf',
+                    whiteSpace: 'nowrap'
+                  }}
+                >
                   float64
                 </span>
               </div>
 
               {/* Stats grid */}
-              <div className="grid grid-cols-2 gap-3 mb-4">
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '12px 10px',
+                marginBottom: '16px'
+              }}>
                 <div>
-                  <div className="text-xs uppercase font-mono mb-1" style={{color: '#7b8983'}}>Mean</div>
-                  <div className="font-mono text-lg font-bold" style={{color: '#f6fffb'}}>
+                  <div style={{fontSize: '10px', color: '#586660', letterSpacing: '0.4px', textTransform: 'uppercase', marginBottom: '4px'}}>MEAN</div>
+                  <div className="font-mono" style={{fontSize: '17px', color: '#f6fffb', fontWeight: '600'}}>
                     {columnStats.mean !== null ? columnStats.mean.toFixed(1) : 'N/A'}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs uppercase font-mono mb-1" style={{color: '#7b8983'}}>Std</div>
-                  <div className="font-mono text-lg font-bold" style={{color: '#f6fffb'}}>
+                  <div style={{fontSize: '10px', color: '#586660', letterSpacing: '0.4px', textTransform: 'uppercase', marginBottom: '4px'}}>STD</div>
+                  <div className="font-mono" style={{fontSize: '17px', color: '#f6fffb', fontWeight: '600'}}>
                     {columnStats.mean !== null ? (columnStats.max - columnStats.min).toFixed(1) : 'N/A'}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs uppercase font-mono mb-1" style={{color: '#7b8983'}}>Min</div>
-                  <div className="font-mono text-lg font-bold" style={{color: '#f6fffb'}}>
+                  <div style={{fontSize: '10px', color: '#586660', letterSpacing: '0.4px', textTransform: 'uppercase', marginBottom: '4px'}}>MIN</div>
+                  <div className="font-mono" style={{fontSize: '17px', color: '#f6fffb', fontWeight: '600'}}>
                     {columnStats.min !== null ? columnStats.min.toLocaleString() : 'N/A'}
                   </div>
                 </div>
                 <div>
-                  <div className="text-xs uppercase font-mono mb-1" style={{color: '#7b8983'}}>Max</div>
-                  <div className="font-mono text-lg font-bold" style={{color: '#f6fffb'}}>
+                  <div style={{fontSize: '10px', color: '#586660', letterSpacing: '0.4px', textTransform: 'uppercase', marginBottom: '4px'}}>MAX</div>
+                  <div className="font-mono" style={{fontSize: '17px', color: '#f6fffb', fontWeight: '600'}}>
                     {columnStats.max !== null ? columnStats.max.toLocaleString() : 'N/A'}
                   </div>
                 </div>
               </div>
 
-              {/* Mini sparkline */}
-              <div className="flex items-end gap-0.5 h-10">
+              {/* Sparkline bars */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                gap: '3px',
+                height: '34px',
+                marginTop: '16px'
+              }}>
                 {sparklineData.map((height, i) => (
                   <div
                     key={i}
-                    className="flex-1 rounded-t"
                     style={{
+                      flex: 1,
                       height: `${height}%`,
-                      background: isEmerald
-                        ? 'linear-gradient(180deg, #34e0a1, #0e9e8e)'
-                        : 'linear-gradient(180deg, #22b8cf, #0891b2)',
-                      opacity: 0.6
+                      borderRadius: '2px 2px 0 0',
+                      background: 'linear-gradient(180deg, #34e0a1, rgba(52,224,161,0.2))'
                     }}
                   ></div>
                 ))}
@@ -90,7 +112,7 @@ export default function StatsPanel({ stats }) {
         })}
       </div>
       {columns.length === 0 && (
-        <p className="text-sm font-mono text-center py-8" style={{color: '#586660'}}>
+        <p className="font-mono text-center" style={{fontSize: '14px', color: '#586660', padding: '32px 0'}}>
           No numeric columns found in this dataset.
         </p>
       )}

@@ -9,7 +9,6 @@ export default function PieChart({ data, columns, numericColumns }) {
   if (!data || data.length === 0 || !columns || columns.length === 0 || !numericColumns || numericColumns.length === 0) {
     return (
       <div className="w-full">
-        <h2 className="text-2xl font-bold text-white mb-4">Distribution Analysis</h2>
         <div className="bg-[#1e1e2e] rounded-lg p-8 border border-gray-700">
           <p className="text-sm text-gray-400 text-center">
             No numeric columns available for visualization.
@@ -70,25 +69,27 @@ export default function PieChart({ data, columns, numericColumns }) {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center mb-4">
-        <h2 className="text-2xl font-bold text-white">Distribution Analysis</h2>
-        <div className="flex items-center gap-2">
-          <label htmlFor="pie-column-select" className="text-sm text-gray-400">
-            Select column:
-          </label>
-          <select
-            id="pie-column-select"
-            value={selectedColumn}
-            onChange={(e) => setSelectedColumn(e.target.value)}
-            className="bg-gray-800 text-white border border-gray-700 rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            {numericColumns.map((col) => (
-              <option key={col} value={col}>
-                {col}
-              </option>
-            ))}
-          </select>
-        </div>
+      <div className="flex items-center gap-2 mb-4">
+        <label htmlFor="pie-column-select" className="font-mono text-xs" style={{color: '#7b8983'}}>
+          Select column:
+        </label>
+        <select
+          id="pie-column-select"
+          value={selectedColumn}
+          onChange={(e) => setSelectedColumn(e.target.value)}
+          className="font-mono text-sm px-3 py-1.5 rounded-lg"
+          style={{
+            background: 'rgba(0,0,0,0.3)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            color: '#f5fbf8'
+          }}
+        >
+          {numericColumns.map((col) => (
+            <option key={col} value={col}>
+              {col}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div className="bg-[#1e1e2e] rounded-lg p-6 border border-gray-700">
