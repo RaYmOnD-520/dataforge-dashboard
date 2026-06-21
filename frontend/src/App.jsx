@@ -402,17 +402,19 @@ function App() {
                       color: '#06231a',
                       background: 'linear-gradient(140deg, #34e0a1, #10b981)',
                       boxShadow: '0 4px 14px -4px rgba(52,224,161,0.6)',
-                      border: 'none'
+                      border: 'none',
+                      cursor: 'pointer'
                     } : {
                       fontSize: '12px',
                       padding: '7px 16px',
                       borderRadius: '8px',
                       color: '#8b9691',
                       background: 'transparent',
-                      border: '1px solid transparent'
+                      border: '1px solid transparent',
+                      cursor: 'pointer'
                     }}
                   >
-                    Bar Chart
+                    Bar
                   </button>
                   <button
                     onClick={() => setActiveChart('line')}
@@ -425,17 +427,19 @@ function App() {
                       color: '#06231a',
                       background: 'linear-gradient(140deg, #34e0a1, #10b981)',
                       boxShadow: '0 4px 14px -4px rgba(52,224,161,0.6)',
-                      border: 'none'
+                      border: 'none',
+                      cursor: 'pointer'
                     } : {
                       fontSize: '12px',
                       padding: '7px 16px',
                       borderRadius: '8px',
                       color: '#8b9691',
                       background: 'transparent',
-                      border: '1px solid transparent'
+                      border: '1px solid transparent',
+                      cursor: 'pointer'
                     }}
                   >
-                    Line Chart
+                    Line
                   </button>
                   <button
                     onClick={() => setActiveChart('pie')}
@@ -448,17 +452,19 @@ function App() {
                       color: '#06231a',
                       background: 'linear-gradient(140deg, #34e0a1, #10b981)',
                       boxShadow: '0 4px 14px -4px rgba(52,224,161,0.6)',
-                      border: 'none'
+                      border: 'none',
+                      cursor: 'pointer'
                     } : {
                       fontSize: '12px',
                       padding: '7px 16px',
                       borderRadius: '8px',
                       color: '#8b9691',
                       background: 'transparent',
-                      border: '1px solid transparent'
+                      border: '1px solid transparent',
+                      cursor: 'pointer'
                     }}
                   >
-                    Pie Chart
+                    Pie
                   </button>
                 </div>
 

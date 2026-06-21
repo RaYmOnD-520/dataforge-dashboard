@@ -1,7 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+const COLORS = ['#34e0a1', '#22b8cf', '#2dd4bf', '#4ade80', '#5eead4', '#86efac']
 
 export default function BarChart({ data, columns, numericColumns }) {
   const [selectedColumn, setSelectedColumn] = useState(numericColumns[0] || '')
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    requestAnimationFrame(() => setMounted(true))
+  }, [selectedColumn])
 
   if (!data || data.length === 0 || !columns || columns.length === 0 || !numericColumns || numericColumns.length === 0) {
     return (
@@ -17,9 +24,10 @@ export default function BarChart({ data, columns, numericColumns }) {
 
   const categoryColumn = columns.find(col => !numericColumns.includes(col)) || columns[0]
 
-  const chartData = data.slice(0, 10).map(row => ({
+  const chartData = data.slice(0, 10).map((row, index) => ({
     name: String(row[categoryColumn] || 'N/A'),
-    value: Number(row[selectedColumn]) || 0
+    value: Number(row[selectedColumn]) || 0,
+    color: COLORS[index % COLORS.length]
   }))
 
   // Find max value for scaling
@@ -66,7 +74,7 @@ export default function BarChart({ data, columns, numericColumns }) {
           gap: '8px'
         }}>
           {chartData.map((item, index) => {
-            const heightPercentage = (item.value / maxValue) * 100
+            const heightPercentage = mounted ? (item.value / maxValue) * 100 : 0
 
             return (
               <div
@@ -86,7 +94,9 @@ export default function BarChart({ data, columns, numericColumns }) {
                   fontSize: '12px',
                   fontWeight: '600',
                   color: '#cfe6dc',
-                  marginTop: 'auto'
+                  marginTop: 'auto',
+                  opacity: mounted ? 1 : 0,
+                  transition: `opacity 0.6s ease ${index * 0.07}s`
                 }}>
                   {item.value.toLocaleString()}
                 </div>
@@ -98,11 +108,10 @@ export default function BarChart({ data, columns, numericColumns }) {
                     maxWidth: '64px',
                     height: `${heightPercentage}%`,
                     borderRadius: '8px 8px 2px 2px',
-                    background: 'linear-gradient(180deg, #34e0a1, rgba(52,224,161,0.22))',
-                    boxShadow: '0 0 24px -4px rgba(52,224,161,0.4), inset 0 1px 0 rgba(255,255,255,0.25)',
-                    border: '1px solid rgba(52,224,161,0.44)',
-                    transition: `height 0.9s cubic-bezier(.16,1,.3,1)`,
-                    transitionDelay: `${index * 0.07}s`
+                    background: `linear-gradient(180deg, ${item.color}, ${item.color}22)`,
+                    boxShadow: `0 0 24px -4px ${item.color}66, inset 0 1px 0 rgba(255,255,255,0.25)`,
+                    border: `1px solid ${item.color}44`,
+                    transition: `height 0.9s cubic-bezier(.16,1,.3,1) ${index * 0.07}s`
                   }}
                 />
 
