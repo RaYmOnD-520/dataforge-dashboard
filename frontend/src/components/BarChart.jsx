@@ -50,7 +50,12 @@ export default function BarChart({ data, columns, numericColumns }) {
         </select>
       </div>
 
-      <div className="bg-[#1e1e2e] rounded-lg border border-gray-700" style={{marginTop: '16px', padding: '24px 16px 16px'}}>
+      <div className="rounded-lg" style={{
+        marginTop: '16px',
+        padding: '24px 16px 16px',
+        background: 'linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0.008))',
+        border: '1px solid rgba(255,255,255,0.07)'
+      }}>
         {/* Custom Bar Chart */}
         <div style={{
           display: 'flex',

@@ -26,11 +26,11 @@ export default function PieChart({ data, columns, numericColumns }) {
 
   const total = chartData.reduce((sum, item) => sum + item.value, 0)
 
-  // Calculate donut chart segments
-  const innerRadius = 74
-  const outerRadius = 120
-  const centerX = 140
-  const centerY = 140
+  // Calculate donut chart segments - larger size
+  const innerRadius = 95
+  const outerRadius = 150
+  const centerX = 170
+  const centerY = 170
 
   const createArc = (startAngle, endAngle, innerR, outerR) => {
     const start = polarToCartesian(centerX, centerY, outerR, endAngle)
@@ -74,7 +74,8 @@ export default function PieChart({ data, columns, numericColumns }) {
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-2 mb-4">
+      {/* Select column dropdown ABOVE the chart container */}
+      <div className="flex items-center gap-2" style={{marginTop: '16px', marginBottom: '16px'}}>
         <label htmlFor="pie-column-select" className="font-mono text-xs" style={{color: '#7b8983'}}>
           Select column:
         </label>
@@ -97,19 +98,24 @@ export default function PieChart({ data, columns, numericColumns }) {
         </select>
       </div>
 
-      <div className="bg-[#1e1e2e] rounded-lg p-6 border border-gray-700">
+      {/* Chart container */}
+      <div className="rounded-lg" style={{
+        marginTop: '16px',
+        background: 'linear-gradient(160deg, rgba(255,255,255,0.03), rgba(255,255,255,0.008))',
+        border: '1px solid rgba(255,255,255,0.07)'
+      }}>
         <div style={{
           display: 'flex',
+          flexDirection: 'row',
           alignItems: 'center',
-          gap: '40px',
-          flexWrap: 'wrap',
+          gap: '60px',
           justifyContent: 'center',
-          padding: '24px',
-          minHeight: '320px'
+          padding: '40px 32px',
+          minHeight: '380px'
         }}>
           {/* Left side: Donut chart */}
-          <div style={{ position: 'relative' }}>
-            <svg width="280" height="280" viewBox="0 0 280 280">
+          <div style={{ position: 'relative', width: '340px', height: '340px', flex: 'none' }}>
+            <svg width="340" height="340" viewBox="0 0 340 340">
               {segments.map((segment, index) => (
                 <path
                   key={index}
@@ -147,79 +153,75 @@ export default function PieChart({ data, columns, numericColumns }) {
           </div>
 
           {/* Right side: Legend */}
-          <div style={{ flex: '1', minWidth: '280px', maxWidth: '420px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              {segments.map((segment, index) => (
-                <div
-                  key={index}
-                  style={{
-                    padding: '8px 12px',
-                    borderRadius: '9px',
-                    background: 'rgba(255,255,255,0.025)',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '10px'
-                  }}
-                >
-                  {/* Color dot */}
-                  <div style={{
-                    width: '11px',
-                    height: '11px',
-                    borderRadius: '3px',
-                    background: segment.color,
-                    boxShadow: `0 0 8px ${segment.color}40`,
-                    flexShrink: 0
-                  }}></div>
+          <div style={{ flex: '1', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {segments.map((segment, index) => (
+              <div
+                key={index}
+                style={{
+                  padding: '12px 16px',
+                  borderRadius: '9px',
+                  background: 'rgba(255,255,255,0.025)',
+                  border: '1px solid rgba(255,255,255,0.05)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '10px'
+                }}
+              >
+                {/* Color dot */}
+                <div style={{
+                  width: '11px',
+                  height: '11px',
+                  borderRadius: '3px',
+                  background: segment.color,
+                  boxShadow: `0 0 8px ${segment.color}40`,
+                  flexShrink: 0
+                }}></div>
 
-                  {/* Label */}
-                  <div style={{
-                    fontSize: '13px',
-                    color: '#cfe6dc',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    whiteSpace: 'nowrap',
-                    maxWidth: '120px'
-                  }}>
-                    {segment.name}
-                  </div>
-
-                  {/* Dotted spacer */}
-                  <div style={{
-                    flex: 1,
-                    borderBottom: '1px dotted rgba(255,255,255,0.18)',
-                    minWidth: '20px'
-                  }}></div>
-
-                  {/* Value */}
-                  <div className="font-mono" style={{
-                    fontSize: '13px',
-                    color: '#f6fffb',
-                    fontWeight: '600',
-                    flexShrink: 0
-                  }}>
-                    {segment.value.toLocaleString()}
-                  </div>
-
-                  {/* Percentage */}
-                  <div className="font-mono" style={{
-                    fontSize: '11px',
-                    color: segment.color,
-                    width: '40px',
-                    textAlign: 'right',
-                    flexShrink: 0
-                  }}>
-                    {segment.percentage.toFixed(1)}%
-                  </div>
+                {/* Label */}
+                <div style={{
+                  fontSize: '13px',
+                  color: '#cfe6dc',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
+                  maxWidth: '120px',
+                  flexShrink: 0
+                }}>
+                  {segment.name}
                 </div>
-              ))}
-            </div>
+
+                {/* Dotted spacer */}
+                <span style={{
+                  flex: 1,
+                  height: '0px',
+                  borderBottom: '1px dotted rgba(255,255,255,0.18)',
+                  margin: '0 8px'
+                }}></span>
+
+                {/* Value */}
+                <div className="font-mono" style={{
+                  fontSize: '13px',
+                  color: '#f6fffb',
+                  fontWeight: '600',
+                  flexShrink: 0
+                }}>
+                  {segment.value.toLocaleString()}
+                </div>
+
+                {/* Percentage */}
+                <div className="font-mono" style={{
+                  fontSize: '11px',
+                  color: segment.color,
+                  width: '40px',
+                  textAlign: 'right',
+                  flexShrink: 0
+                }}>
+                  {segment.percentage.toFixed(1)}%
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-
-        <p className="text-xs text-gray-500 text-center" style={{marginTop: '12px', marginBottom: '12px'}}>
-          Showing first 10 rows • Category: {categoryColumn} • Value: {selectedColumn}
-        </p>
       </div>
     </div>
   )
