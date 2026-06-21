@@ -1,14 +1,11 @@
+import { useMemo } from 'react'
+
 export default function StatsPanel({ stats }) {
   if (!stats || Object.keys(stats).length === 0) {
     return null
   }
 
   const columns = Object.keys(stats)
-
-  // Generate random heights for sparkline bars (between 20% and 100%)
-  const generateSparkline = () => {
-    return Array.from({ length: 12 }, () => 20 + Math.random() * 80)
-  }
 
   return (
     <div className="w-full">
@@ -19,8 +16,13 @@ export default function StatsPanel({ stats }) {
       }}>
         {columns.map((column, idx) => {
           const columnStats = stats[column]
-          const sparklineData = generateSparkline()
           const isEmerald = idx % 2 === 0
+
+          // Generate stable random heights for sparkline bars
+          const sparklineData = useMemo(() =>
+            Array.from({ length: 12 }, () => Math.floor(Math.random() * 80) + 20),
+            [column]
+          )
 
           return (
             <div

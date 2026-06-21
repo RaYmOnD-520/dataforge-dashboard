@@ -68,8 +68,8 @@ function App() {
 
           {/* Dataset Overview Section */}
           {uploadedData && (
-            <div className="mb-16" style={{marginTop: '40px'}}>
-              <div className="flex items-center gap-3 mb-6">
+            <div style={{marginBottom: '40px'}}>
+              <div className="flex items-center gap-3" style={{paddingTop: '8px', marginBottom: '20px'}}>
                 <div style={{
                   width: '5px',
                   height: '18px',
@@ -252,8 +252,8 @@ function App() {
 
           {/* Data Preview Section */}
           {uploadedData && (
-            <div className="mb-16">
-              <div className="flex items-center gap-3 mb-6">
+            <div style={{marginBottom: '40px'}}>
+              <div className="flex items-center gap-3" style={{paddingTop: '8px', marginBottom: '20px'}}>
                 <div style={{
                   width: '5px',
                   height: '18px',
@@ -268,8 +268,8 @@ function App() {
 
           {/* Column Statistics Section */}
           {uploadedData && (
-            <div className="mb-16">
-              <div className="flex items-center gap-3 mb-6">
+            <div style={{marginBottom: '40px'}}>
+              <div className="flex items-center gap-3" style={{paddingTop: '8px', marginBottom: '20px'}}>
                 <div style={{
                   width: '5px',
                   height: '18px',
@@ -284,7 +284,7 @@ function App() {
 
           {/* Data Visualisation Section */}
           {uploadedData && (
-            <div className="mb-16">
+            <div style={{marginBottom: '40px'}}>
               <div style={{
                 position: 'relative',
                 overflow: 'hidden',
@@ -303,7 +303,7 @@ function App() {
                   background: 'radial-gradient(circle, rgba(52,224,161,0.1), transparent 70%)'
                 }}></div>
 
-                <div className="flex items-center justify-between mb-6" style={{position: 'relative', zIndex: 1}}>
+                <div className="flex items-center justify-between" style={{position: 'relative', zIndex: 1, paddingTop: '8px', marginBottom: '20px'}}>
                   <div>
                     <div className="flex items-center gap-3">
                       <div style={{

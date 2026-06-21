@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { PieChart as RechartsPieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 
-const COLORS = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4']
+const COLORS = ['#34e0a1', '#22b8cf', '#2dd4bf', '#4ade80', '#5eead4', '#86efac']
 
 export default function PieChart({ data, columns, numericColumns }) {
   const [selectedColumn, setSelectedColumn] = useState(numericColumns[0] || '')
@@ -27,45 +26,51 @@ export default function PieChart({ data, columns, numericColumns }) {
 
   const total = chartData.reduce((sum, item) => sum + item.value, 0)
 
-  const CustomTooltip = ({ active, payload }) => {
-    if (active && payload && payload.length) {
-      const percentage = total > 0 ? ((payload[0].value / total) * 100).toFixed(1) : 0
-      return (
-        <div className="bg-gray-800 border border-gray-700 rounded-lg p-3 shadow-lg">
-          <p className="text-sm text-gray-300 mb-1">{payload[0].name}</p>
-          <p className="text-sm font-semibold text-white">
-            {selectedColumn}: {payload[0].value.toLocaleString()}
-          </p>
-          <p className="text-sm text-gray-400">
-            {percentage}% of total
-          </p>
-        </div>
-      )
+  // Calculate donut chart segments
+  const innerRadius = 74
+  const outerRadius = 120
+  const centerX = 140
+  const centerY = 140
+
+  const createArc = (startAngle, endAngle, innerR, outerR) => {
+    const start = polarToCartesian(centerX, centerY, outerR, endAngle)
+    const end = polarToCartesian(centerX, centerY, outerR, startAngle)
+    const innerStart = polarToCartesian(centerX, centerY, innerR, endAngle)
+    const innerEnd = polarToCartesian(centerX, centerY, innerR, startAngle)
+
+    const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1'
+
+    return [
+      'M', start.x, start.y,
+      'A', outerR, outerR, 0, largeArcFlag, 0, end.x, end.y,
+      'L', innerEnd.x, innerEnd.y,
+      'A', innerR, innerR, 0, largeArcFlag, 1, innerStart.x, innerStart.y,
+      'Z'
+    ].join(' ')
+  }
+
+  const polarToCartesian = (centerX, centerY, radius, angleInDegrees) => {
+    const angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0
+    return {
+      x: centerX + (radius * Math.cos(angleInRadians)),
+      y: centerY + (radius * Math.sin(angleInRadians))
     }
-    return null
   }
 
-  const renderCustomLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, name }) => {
-    const RADIAN = Math.PI / 180
-    const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-    const x = cx + radius * Math.cos(-midAngle * RADIAN)
-    const y = cy + radius * Math.sin(-midAngle * RADIAN)
-
-    if (percent < 0.05) return null
-
-    return (
-      <text
-        x={x}
-        y={y}
-        fill="white"
-        textAnchor={x > cx ? 'start' : 'end'}
-        dominantBaseline="central"
-        className="text-xs font-medium"
-      >
-        {`${(percent * 100).toFixed(0)}%`}
-      </text>
-    )
-  }
+  let currentAngle = 0
+  const segments = chartData.map((item, index) => {
+    const percentage = total > 0 ? (item.value / total) * 100 : 0
+    const angle = (item.value / total) * 360
+    const segment = {
+      ...item,
+      percentage,
+      startAngle: currentAngle,
+      endAngle: currentAngle + angle,
+      color: COLORS[index % COLORS.length]
+    }
+    currentAngle += angle
+    return segment
+  })
 
   return (
     <div className="w-full">
@@ -93,31 +98,126 @@ export default function PieChart({ data, columns, numericColumns }) {
       </div>
 
       <div className="bg-[#1e1e2e] rounded-lg p-6 border border-gray-700">
-        <ResponsiveContainer width="100%" height={400}>
-          <RechartsPieChart>
-            <Pie
-              data={chartData}
-              cx="50%"
-              cy="50%"
-              labelLine={false}
-              label={renderCustomLabel}
-              outerRadius={120}
-              fill="#8884d8"
-              dataKey="value"
-            >
-              {chartData.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          gap: '40px',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+          padding: '24px',
+          minHeight: '320px'
+        }}>
+          {/* Left side: Donut chart */}
+          <div style={{ position: 'relative' }}>
+            <svg width="280" height="280" viewBox="0 0 280 280">
+              {segments.map((segment, index) => (
+                <path
+                  key={index}
+                  d={createArc(segment.startAngle, segment.endAngle, innerRadius, outerRadius)}
+                  fill={segment.color}
+                  style={{ transition: 'opacity 0.2s' }}
+                  opacity="0.9"
+                />
               ))}
-            </Pie>
-            <Tooltip content={<CustomTooltip />} />
-            <Legend
-              wrapperStyle={{ paddingTop: '20px' }}
-              iconType="circle"
-              formatter={(value) => <span className="text-sm text-gray-300">{value}</span>}
-            />
-          </RechartsPieChart>
-        </ResponsiveContainer>
-        <p className="text-xs text-gray-500 text-center mt-4">
+            </svg>
+            {/* Center text */}
+            <div style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              textAlign: 'center'
+            }}>
+              <div className="font-mono" style={{
+                fontSize: '24px',
+                fontWeight: '700',
+                color: '#f6fffb',
+                lineHeight: '1.2'
+              }}>
+                {total.toLocaleString()}
+              </div>
+              <div style={{
+                fontSize: '11px',
+                color: '#7b8983',
+                marginTop: '4px'
+              }}>
+                total
+              </div>
+            </div>
+          </div>
+
+          {/* Right side: Legend */}
+          <div style={{ flex: '1', minWidth: '280px', maxWidth: '420px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {segments.map((segment, index) => (
+                <div
+                  key={index}
+                  style={{
+                    padding: '8px 12px',
+                    borderRadius: '9px',
+                    background: 'rgba(255,255,255,0.025)',
+                    border: '1px solid rgba(255,255,255,0.05)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px'
+                  }}
+                >
+                  {/* Color dot */}
+                  <div style={{
+                    width: '11px',
+                    height: '11px',
+                    borderRadius: '3px',
+                    background: segment.color,
+                    boxShadow: `0 0 8px ${segment.color}40`,
+                    flexShrink: 0
+                  }}></div>
+
+                  {/* Label */}
+                  <div style={{
+                    fontSize: '13px',
+                    color: '#cfe6dc',
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    maxWidth: '120px'
+                  }}>
+                    {segment.name}
+                  </div>
+
+                  {/* Dotted spacer */}
+                  <div style={{
+                    flex: 1,
+                    borderBottom: '1px dotted rgba(255,255,255,0.18)',
+                    minWidth: '20px'
+                  }}></div>
+
+                  {/* Value */}
+                  <div className="font-mono" style={{
+                    fontSize: '13px',
+                    color: '#f6fffb',
+                    fontWeight: '600',
+                    flexShrink: 0
+                  }}>
+                    {segment.value.toLocaleString()}
+                  </div>
+
+                  {/* Percentage */}
+                  <div className="font-mono" style={{
+                    fontSize: '11px',
+                    color: segment.color,
+                    width: '40px',
+                    textAlign: 'right',
+                    flexShrink: 0
+                  }}>
+                    {segment.percentage.toFixed(1)}%
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <p className="text-xs text-gray-500 text-center" style={{marginTop: '12px', marginBottom: '12px'}}>
           Showing first 10 rows • Category: {categoryColumn} • Value: {selectedColumn}
         </p>
       </div>

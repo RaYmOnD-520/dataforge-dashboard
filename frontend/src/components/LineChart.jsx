@@ -39,7 +39,7 @@ export default function LineChart({ data, columns, numericColumns }) {
 
   return (
     <div className="w-full">
-      <div className="flex items-center gap-2 mb-4">
+      <div className="flex items-center gap-2" style={{marginTop: '16px', marginBottom: '16px'}}>
         <label htmlFor="line-column-select" className="font-mono text-xs" style={{color: '#7b8983'}}>
           Select column:
         </label>
@@ -62,8 +62,8 @@ export default function LineChart({ data, columns, numericColumns }) {
         </select>
       </div>
 
-      <div className="bg-[#1e1e2e] rounded-lg p-6 border border-gray-700">
-        <ResponsiveContainer width="100%" height={400}>
+      <div className="bg-[#1e1e2e] rounded-lg p-6 border border-gray-700" style={{marginTop: '16px', padding: '24px 0 16px 0'}}>
+        <ResponsiveContainer width="100%" height={380}>
           <RechartsLineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 60 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
             <XAxis
@@ -89,7 +89,7 @@ export default function LineChart({ data, columns, numericColumns }) {
             />
           </RechartsLineChart>
         </ResponsiveContainer>
-        <p className="text-xs text-gray-500 text-center mt-4">
+        <p className="text-xs text-gray-500 text-center" style={{marginTop: '12px', marginBottom: '8px'}}>
           Showing first 10 rows • X-axis: {categoryColumn} • Y-axis: {selectedColumn}
         </p>
       </div>
