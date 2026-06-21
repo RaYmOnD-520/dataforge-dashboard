@@ -111,17 +111,26 @@ export default function FileUpload({ onUploadSuccess }) {
   }
 
   return (
-    <div className="w-full max-w-2xl mx-auto p-6">
+    <div className="w-full mx-auto">
+      {/* Heading */}
+      <div className="mb-6">
+        <h2 className="font-heading font-bold text-3xl mb-2" style={{color: '#f5fbf8'}}>
+          Build your analysis
+        </h2>
+        <p className="font-mono text-sm" style={{color: '#7b8983'}}>Drop a dataset to begin forging.</p>
+      </div>
+
+      {/* Upload Zone */}
       <div
-        className={`
-          relative border-2 border-dashed rounded-lg p-8
-          transition-colors duration-200
-          ${isDragging
-            ? 'border-indigo-500 bg-indigo-500/10'
-            : 'border-gray-600 bg-gray-800'
-          }
-          ${selectedFile ? 'bg-gray-800/50' : ''}
-        `}
+        className="relative rounded-3xl transition-all duration-300"
+        style={{
+          border: isDragging ? '1px dashed rgba(52,224,161,0.6)' : '1px dashed rgba(52,224,161,0.3)',
+          background: isDragging
+            ? 'radial-gradient(600px 400px at 50% 0%, rgba(52,224,161,0.08), transparent 70%)'
+            : 'radial-gradient(600px 400px at 50% 0%, rgba(52,224,161,0.04), transparent 70%)',
+          padding: '48px 24px',
+          marginTop: '16px'
+        }}
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -137,35 +146,14 @@ export default function FileUpload({ onUploadSuccess }) {
 
         {!selectedFile ? (
           <div className="text-center flex flex-col items-center justify-center">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400 mb-6"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 48 48"
-              aria-hidden="true"
-            >
-              <path
-                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <button
-              type="button"
-              onClick={handleBrowseClick}
-              className="px-6 py-2 bg-indigo-500 text-white font-medium rounded-md hover:bg-indigo-600 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-800"
-            >
-              Choose CSV File
-            </button>
-            <p className="text-sm text-gray-400 mt-3">or drag and drop</p>
-            <p className="text-xs text-gray-500 mt-2">CSV files only</p>
-          </div>
-        ) : (
-          <div className="text-center">
-            <div className="flex items-center justify-center mb-4">
+            {/* Floating Icon */}
+            <div className="mb-8 df-float" style={{
+              filter: 'drop-shadow(0 0 20px rgba(52,224,161,0.3))',
+              paddingTop: '12px'
+            }}>
               <svg
-                className="h-10 w-10 text-indigo-400"
+                className="h-16 w-16"
+                style={{color: '#34e0a1'}}
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -173,62 +161,103 @@ export default function FileUpload({ onUploadSuccess }) {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  strokeWidth={1.5}
+                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                 />
               </svg>
             </div>
-            <p className="text-sm font-medium text-white">{selectedFile.name}</p>
-            <p className="text-xs text-gray-400 mt-1">{formatFileSize(selectedFile.size)}</p>
-            <div className="mt-4 flex gap-3 justify-center">
+            <button
+              type="button"
+              onClick={handleBrowseClick}
+              className="rounded-xl transition-all hover:shadow-lg"
+              style={{
+                background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                color: '#06231a',
+                padding: '12px 28px',
+                fontSize: '14px',
+                fontWeight: '600',
+                whiteSpace: 'nowrap'
+              }}
+            >
+              Browse files
+            </button>
+            <p className="text-sm mt-4" style={{color: '#cfe6dc'}}>or drag and drop</p>
+            <p className="text-xs mt-2 font-mono" style={{color: '#586660'}}>CSV files only</p>
+          </div>
+        ) : (
+          <div>
+            {/* File Info Bar */}
+            <div className="flex items-center justify-between p-4 rounded-xl" style={{
+              background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
+              border: '1px solid rgba(255,255,255,0.08)'
+            }}>
+              <div className="flex items-center gap-3">
+                <span className="px-2 py-1 rounded font-mono text-xs font-semibold" style={{
+                  background: 'rgba(52,224,161,0.15)',
+                  color: '#34e0a1'
+                }}>CSV</span>
+                <span className="font-mono text-sm" style={{color: '#cfe6dc'}}>{selectedFile.name}</span>
+                <span className="font-mono text-xs" style={{color: '#7b8983'}}>{formatFileSize(selectedFile.size)}</span>
+              </div>
+              <div className="flex items-center gap-3">
+                {!isLoading && (
+                  <span className="font-mono text-xs flex items-center gap-1.5" style={{color: '#34e0a1'}}>
+                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    parsed
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Progress Bar */}
+            {isLoading && (
+              <div className="mt-3 h-1 rounded-full overflow-hidden" style={{background: 'rgba(255,255,255,0.05)'}}>
+                <div className="h-full animate-pulse" style={{
+                  width: '100%',
+                  background: 'linear-gradient(90deg, #34e0a1, #22b8cf)'
+                }}></div>
+              </div>
+            )}
+
+            {/* Action Buttons */}
+            <div className="mt-4 flex gap-3">
               <button
                 onClick={handleRemoveFile}
                 disabled={isLoading}
-                className="px-4 py-2 text-sm font-medium text-gray-300 bg-gray-700 rounded-md hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="px-4 py-2 rounded-lg font-mono text-sm transition-colors disabled:opacity-50"
+                style={{
+                  background: 'rgba(255,255,255,0.03)',
+                  color: '#7b8983',
+                  border: '1px solid rgba(255,255,255,0.06)'
+                }}
               >
                 Remove
               </button>
               <button
                 onClick={handleUpload}
                 disabled={isLoading}
-                className="px-4 py-2 text-sm font-medium text-white bg-indigo-500 rounded-md hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
+                className="flex-1 px-4 py-2 rounded-lg font-mono text-sm font-semibold transition-all disabled:opacity-50"
+                style={{
+                  background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                  color: '#06231a'
+                }}
               >
-                {isLoading ? (
-                  <>
-                    <svg
-                      className="animate-spin h-4 w-4 text-white"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        className="opacity-25"
-                        cx="12"
-                        cy="12"
-                        r="10"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                      ></circle>
-                      <path
-                        className="opacity-75"
-                        fill="currentColor"
-                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                      ></path>
-                    </svg>
-                    Uploading...
-                  </>
-                ) : (
-                  'Upload'
-                )}
+                {isLoading ? 'Uploading...' : 'Upload & Process'}
               </button>
             </div>
           </div>
         )}
       </div>
 
+      {/* Error Message */}
       {error && (
-        <div className="mt-4 p-4 bg-red-900/20 border border-red-500/50 rounded-lg">
-          <p className="text-sm text-red-400">{error}</p>
+        <div className="mt-4 p-4 rounded-xl" style={{
+          background: 'rgba(239,68,68,0.1)',
+          border: '1px solid rgba(239,68,68,0.3)'
+        }}>
+          <p className="text-sm font-mono" style={{color: '#f87171'}}>{error}</p>
         </div>
       )}
     </div>
