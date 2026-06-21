@@ -13,6 +13,10 @@ export default function FileUpload({ onUploadSuccess }) {
       setError('Please upload a CSV file only')
       return false
     }
+    if (file.size > 50 * 1024 * 1024) {
+      setError('File size must be under 50 MB')
+      return false
+    }
     setError('')
     return true
   }
@@ -111,31 +115,46 @@ export default function FileUpload({ onUploadSuccess }) {
   }
 
   return (
-    <div className="w-full mx-auto">
+    <div className="w-full">
       {/* Heading */}
-      <div className="mb-6">
-        <h2 className="font-heading font-bold text-3xl mb-2" style={{color: '#f5fbf8'}}>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: '12px', marginBottom: '16px' }}>
+        <h1 style={{ margin: 0, fontFamily: "'Space Grotesk', sans-serif", fontWeight: 700, fontSize: '30px', letterSpacing: '-0.6px', color: '#f5fbf8' }}>
           Build your analysis
-        </h2>
-        <p className="font-mono text-sm" style={{color: '#7b8983'}}>Drop a dataset to begin forging.</p>
+        </h1>
+        <span style={{ fontSize: '14px', color: '#7b8983' }}>
+          Drop a dataset to begin forging.
+        </span>
       </div>
 
       {/* Upload Zone */}
       <div
-        className="relative rounded-3xl transition-all duration-300"
         style={{
-          border: isDragging ? '1px dashed rgba(52,224,161,0.6)' : '1px dashed rgba(52,224,161,0.3)',
+          position: 'relative',
+          overflow: 'hidden',
+          padding: '48px 32px',
+          borderRadius: '20px',
+          border: isDragging ? '2px dashed rgba(52,224,161,0.7)' : '2px dashed rgba(52,224,161,0.28)',
           background: isDragging
-            ? 'radial-gradient(600px 400px at 50% 0%, rgba(52,224,161,0.08), transparent 70%)'
-            : 'radial-gradient(600px 400px at 50% 0%, rgba(52,224,161,0.04), transparent 70%)',
-          padding: '48px 24px',
-          marginTop: '16px'
+            ? 'linear-gradient(160deg, rgba(52,224,161,0.12), rgba(52,224,161,0.03))'
+            : 'linear-gradient(160deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01))',
+          boxShadow: isDragging ? '0 0 50px -10px rgba(52,224,161,0.4), inset 0 1px 0 rgba(255,255,255,0.05)' : 'inset 0 1px 0 rgba(255,255,255,0.05)',
+          transition: 'all .25s ease',
+          cursor: 'pointer'
         }}
         onDragEnter={handleDragEnter}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
+        {/* Radial glow */}
+        <div style={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '20px',
+          background: 'radial-gradient(600px 200px at 50% 0%, rgba(52,224,161,0.1), transparent 70%)',
+          pointerEvents: 'none'
+        }}></div>
+
         <input
           ref={fileInputRef}
           type="file"
@@ -145,92 +164,176 @@ export default function FileUpload({ onUploadSuccess }) {
         />
 
         {!selectedFile ? (
-          <div className="text-center flex flex-col items-center justify-center">
-            {/* Floating Icon */}
-            <div className="mb-8 df-float" style={{
-              filter: 'drop-shadow(0 0 20px rgba(52,224,161,0.3))',
-              paddingTop: '12px'
+          <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '18px', textAlign: 'center' }}>
+            {/* Floating upload icon */}
+            <div className="df-float" style={{
+              width: '64px',
+              height: '64px',
+              borderRadius: '18px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'linear-gradient(145deg, rgba(52,224,161,0.18), rgba(52,224,161,0.04))',
+              border: '1px solid rgba(52,224,161,0.3)',
+              boxShadow: '0 0 30px rgba(52,224,161,0.18)'
             }}>
-              <svg
-                className="h-16 w-16"
-                style={{color: '#34e0a1'}}
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={1.5}
-                  d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                />
-              </svg>
-            </div>
-            <button
-              type="button"
-              onClick={handleBrowseClick}
-              className="rounded-xl transition-all hover:shadow-lg"
-              style={{
-                background: 'linear-gradient(140deg, #34e0a1, #10b981)',
-                color: '#06231a',
-                padding: '12px 28px',
-                fontSize: '14px',
-                fontWeight: '600',
-                whiteSpace: 'nowrap'
-              }}
-            >
-              Browse files
-            </button>
-            <p className="text-sm mt-4" style={{color: '#cfe6dc'}}>or drag and drop</p>
-            <p className="text-xs mt-2 font-mono" style={{color: '#586660'}}>CSV files only</p>
-          </div>
-        ) : (
-          <div>
-            {/* File Info Bar */}
-            <div className="flex items-center justify-between p-4 rounded-xl" style={{
-              background: 'linear-gradient(155deg, rgba(255,255,255,0.05), rgba(255,255,255,0.012))',
-              border: '1px solid rgba(255,255,255,0.08)'
-            }}>
-              <div className="flex items-center gap-3">
-                <span className="px-2 py-1 rounded font-mono text-xs font-semibold" style={{
-                  background: 'rgba(52,224,161,0.15)',
-                  color: '#34e0a1'
-                }}>CSV</span>
-                <span className="font-mono text-sm" style={{color: '#cfe6dc'}}>{selectedFile.name}</span>
-                <span className="font-mono text-xs" style={{color: '#7b8983'}}>{formatFileSize(selectedFile.size)}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                {!isLoading && (
-                  <span className="font-mono text-xs flex items-center gap-1.5" style={{color: '#34e0a1'}}>
-                    <svg className="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    parsed
-                  </span>
-                )}
-              </div>
-            </div>
-
-            {/* Progress Bar */}
-            {isLoading && (
-              <div className="mt-3 h-1 rounded-full overflow-hidden" style={{background: 'rgba(255,255,255,0.05)'}}>
-                <div className="h-full animate-pulse" style={{
-                  width: '100%',
-                  background: 'linear-gradient(90deg, #34e0a1, #22b8cf)'
+              <div style={{ position: 'relative', width: '24px', height: '24px' }}>
+                {/* Upload arrow */}
+                <div style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '2px',
+                  width: '3px',
+                  height: '14px',
+                  borderRadius: '3px',
+                  background: '#34e0a1',
+                  transform: 'translateX(-50%)'
+                }}></div>
+                <div style={{
+                  position: 'absolute',
+                  left: '50%',
+                  top: '2px',
+                  width: '13px',
+                  height: '13px',
+                  borderLeft: '3px solid #34e0a1',
+                  borderTop: '3px solid #34e0a1',
+                  borderRadius: '3px 0 0 0',
+                  transform: 'translate(-50%, 0) rotate(45deg)'
+                }}></div>
+                {/* Base line */}
+                <div style={{
+                  position: 'absolute',
+                  left: 0,
+                  bottom: 0,
+                  width: '24px',
+                  height: '3px',
+                  borderRadius: '3px',
+                  background: 'rgba(52,224,161,0.5)'
                 }}></div>
               </div>
-            )}
+            </div>
+
+            <div>
+              <div style={{ fontFamily: "'Space Grotesk', sans-serif", fontWeight: 600, fontSize: '18px', color: '#eafff6' }}>
+                {isDragging ? 'Release to forge' : 'Drag & drop your CSV'}
+              </div>
+              <div style={{ fontSize: '13px', color: '#7b8983', marginTop: '5px' }}>
+                CSV up to 50 MB · UTF-8 · comma delimited
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginTop: '2px' }}>
+              <button
+                onClick={handleBrowseClick}
+                style={{
+                  fontFamily: "'Inter', sans-serif",
+                  fontWeight: 600,
+                  fontSize: '13px',
+                  color: '#06231a',
+                  padding: '10px 20px',
+                  border: 'none',
+                  borderRadius: '10px',
+                  cursor: 'pointer',
+                  background: 'linear-gradient(140deg, #34e0a1, #10b981)',
+                  boxShadow: '0 6px 20px -6px rgba(52,224,161,0.6)',
+                  transition: 'all 0.2s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.target.style.background = 'linear-gradient(140deg, #44eeb0, #18c896)'
+                  e.target.style.boxShadow = '0 8px 26px -6px rgba(52,224,161,0.75)'
+                  e.target.style.transform = 'translateY(-1px)'
+                }}
+                onMouseLeave={(e) => {
+                  e.target.style.background = 'linear-gradient(140deg, #34e0a1, #10b981)'
+                  e.target.style.boxShadow = '0 6px 20px -6px rgba(52,224,161,0.6)'
+                  e.target.style.transform = 'translateY(0)'
+                }}
+              >
+                Browse files
+              </button>
+              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: '12px', color: '#586660' }}>
+                or paste a URL
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div style={{ position: 'relative' }}>
+            {/* File Info Display */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              padding: '11px 16px',
+              borderRadius: '12px',
+              background: 'linear-gradient(155deg, rgba(255,255,255,0.04), rgba(255,255,255,0.012))',
+              border: '1px solid rgba(255,255,255,0.07)'
+            }}>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: '10px',
+                fontWeight: 600,
+                color: '#06231a',
+                padding: '4px 7px',
+                borderRadius: '5px',
+                background: '#34e0a1'
+              }}>CSV</span>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: '13px',
+                color: '#cfe6dc'
+              }}>{selectedFile.name}</span>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: '12px',
+                color: '#586660'
+              }}>{formatFileSize(selectedFile.size)}</span>
+
+              {/* Progress bar or parsed indicator */}
+              {isLoading ? (
+                <div style={{
+                  flex: 1,
+                  height: '4px',
+                  borderRadius: '4px',
+                  background: 'rgba(255,255,255,0.06)',
+                  overflow: 'hidden',
+                  maxWidth: '220px',
+                  marginLeft: 'auto'
+                }}>
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    borderRadius: '4px',
+                    background: 'linear-gradient(90deg, #34e0a1, #22b8cf)',
+                    animation: 'pulse 1.5s ease-in-out infinite'
+                  }}></div>
+                </div>
+              ) : (
+                <span style={{
+                  fontFamily: "'JetBrains Mono', monospace",
+                  fontSize: '12px',
+                  color: '#34e0a1',
+                  marginLeft: 'auto'
+                }}>parsed ✓</span>
+              )}
+            </div>
 
             {/* Action Buttons */}
-            <div className="mt-4 flex gap-3">
+            <div style={{ marginTop: '14px', display: 'flex', gap: '12px' }}>
               <button
                 onClick={handleRemoveFile}
                 disabled={isLoading}
-                className="px-4 py-2 rounded-lg font-mono text-sm transition-colors disabled:opacity-50"
                 style={{
-                  background: 'rgba(255,255,255,0.03)',
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: '13px',
+                  fontWeight: 500,
                   color: '#7b8983',
-                  border: '1px solid rgba(255,255,255,0.06)'
+                  padding: '9px 18px',
+                  border: '1px solid rgba(255,255,255,0.06)',
+                  borderRadius: '10px',
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
+                  background: 'rgba(255,255,255,0.03)',
+                  opacity: isLoading ? 0.5 : 1,
+                  transition: 'all 0.2s ease'
                 }}
               >
                 Remove
@@ -238,10 +341,20 @@ export default function FileUpload({ onUploadSuccess }) {
               <button
                 onClick={handleUpload}
                 disabled={isLoading}
-                className="flex-1 px-4 py-2 rounded-lg font-mono text-sm font-semibold transition-all disabled:opacity-50"
                 style={{
+                  flex: 1,
+                  fontFamily: "'Inter', sans-serif",
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: '#06231a',
+                  padding: '9px 18px',
+                  border: 'none',
+                  borderRadius: '10px',
+                  cursor: isLoading ? 'not-allowed' : 'pointer',
                   background: 'linear-gradient(140deg, #34e0a1, #10b981)',
-                  color: '#06231a'
+                  boxShadow: '0 6px 20px -6px rgba(52,224,161,0.6)',
+                  opacity: isLoading ? 0.5 : 1,
+                  transition: 'all 0.2s ease'
                 }}
               >
                 {isLoading ? 'Uploading...' : 'Upload & Process'}
@@ -253,11 +366,19 @@ export default function FileUpload({ onUploadSuccess }) {
 
       {/* Error Message */}
       {error && (
-        <div className="mt-4 p-4 rounded-xl" style={{
+        <div style={{
+          marginTop: '14px',
+          padding: '12px 16px',
+          borderRadius: '12px',
           background: 'rgba(239,68,68,0.1)',
           border: '1px solid rgba(239,68,68,0.3)'
         }}>
-          <p className="text-sm font-mono" style={{color: '#f87171'}}>{error}</p>
+          <p style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: '13px',
+            color: '#f87171',
+            margin: 0
+          }}>{error}</p>
         </div>
       )}
     </div>

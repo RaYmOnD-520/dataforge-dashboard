@@ -1,4 +1,8 @@
+import { useState } from 'react'
+
 export default function DataTable({ data, columns }) {
+  const [hoveredRow, setHoveredRow] = useState(null)
+
   if (!data || data.length === 0 || !columns || columns.length === 0) {
     return null
   }
@@ -51,8 +55,12 @@ export default function DataTable({ data, columns }) {
             {previewData.map((row, rowIndex) => (
               <tr
                 key={rowIndex}
+                onMouseEnter={() => setHoveredRow(rowIndex)}
+                onMouseLeave={() => setHoveredRow(null)}
                 style={{
-                  borderBottom: rowIndex < previewData.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none'
+                  borderBottom: rowIndex < previewData.length - 1 ? '1px solid rgba(255,255,255,0.04)' : 'none',
+                  background: hoveredRow === rowIndex ? 'rgba(52,224,161,0.04)' : 'transparent',
+                  transition: 'background 0.15s ease'
                 }}
               >
                 {columns.map((column, colIndex) => {
@@ -65,7 +73,8 @@ export default function DataTable({ data, columns }) {
                       style={{
                         padding: '13px 18px',
                         fontSize: '13px',
-                        color: '#e6f3ec'
+                        color: '#e6f3ec',
+                        textAlign: isNum ? 'right' : 'left'
                       }}
                     >
                       {value !== null && value !== undefined ? String(value) : '—'}
