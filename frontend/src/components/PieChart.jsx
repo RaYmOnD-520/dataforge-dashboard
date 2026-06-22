@@ -26,11 +26,11 @@ export default function PieChart({ data, columns, numericColumns }) {
 
   const total = chartData.reduce((sum, item) => sum + item.value, 0)
 
-  // Calculate donut chart segments - larger size
-  const innerRadius = 95
-  const outerRadius = 150
-  const centerX = 170
-  const centerY = 170
+  // Calculate donut chart segments - matching Claude Design dimensions
+  const innerRadius = 74
+  const outerRadius = 120
+  const centerX = 150
+  const centerY = 150
 
   const createArc = (startAngle, endAngle, innerR, outerR) => {
     const start = polarToCartesian(centerX, centerY, outerR, endAngle)
@@ -108,21 +108,27 @@ export default function PieChart({ data, columns, numericColumns }) {
           display: 'flex',
           flexDirection: 'row',
           alignItems: 'center',
-          gap: '60px',
+          gap: '40px',
           justifyContent: 'center',
           padding: '40px 32px',
-          minHeight: '380px'
+          minHeight: '300px',
+          flexWrap: 'wrap'
         }}>
           {/* Left side: Donut chart */}
-          <div style={{ position: 'relative', width: '340px', height: '340px', flex: 'none' }}>
-            <svg width="340" height="340" viewBox="0 0 340 340">
+          <div style={{ position: 'relative', width: '300px', height: '300px', flex: 'none' }}>
+            <svg width="300" height="300" viewBox="0 0 300 300">
               {segments.map((segment, index) => (
                 <path
                   key={index}
                   d={createArc(segment.startAngle, segment.endAngle, innerRadius, outerRadius)}
                   fill={segment.color}
-                  style={{ transition: 'opacity 0.2s' }}
-                  opacity="0.9"
+                  stroke="#0a100d"
+                  strokeWidth="3"
+                  style={{
+                    transformOrigin: `${centerX}px ${centerY}px`,
+                    transform: 'scale(1)',
+                    transition: `all 0.6s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.06}s`
+                  }}
                 />
               ))}
             </svg>
@@ -132,10 +138,11 @@ export default function PieChart({ data, columns, numericColumns }) {
               top: '50%',
               left: '50%',
               transform: 'translate(-50%, -50%)',
-              textAlign: 'center'
+              textAlign: 'center',
+              pointerEvents: 'none'
             }}>
               <div className="font-mono" style={{
-                fontSize: '24px',
+                fontSize: '28px',
                 fontWeight: '700',
                 color: '#f6fffb',
                 lineHeight: '1.2'
@@ -145,7 +152,8 @@ export default function PieChart({ data, columns, numericColumns }) {
               <div style={{
                 fontSize: '11px',
                 color: '#7b8983',
-                marginTop: '4px'
+                marginTop: '4px',
+                letterSpacing: '0.5px'
               }}>
                 total
               </div>
@@ -153,12 +161,12 @@ export default function PieChart({ data, columns, numericColumns }) {
           </div>
 
           {/* Right side: Legend */}
-          <div style={{ flex: '1', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ flex: '1', minWidth: '260px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {segments.map((segment, index) => (
               <div
                 key={index}
                 style={{
-                  padding: '12px 16px',
+                  padding: '8px 12px',
                   borderRadius: '9px',
                   background: 'rgba(255,255,255,0.025)',
                   border: '1px solid rgba(255,255,255,0.05)',
@@ -173,19 +181,15 @@ export default function PieChart({ data, columns, numericColumns }) {
                   height: '11px',
                   borderRadius: '3px',
                   background: segment.color,
-                  boxShadow: `0 0 8px ${segment.color}40`,
-                  flexShrink: 0
+                  boxShadow: `0 0 8px ${segment.color}88`,
+                  flex: 'none'
                 }}></div>
 
                 {/* Label */}
                 <div style={{
                   fontSize: '13px',
                   color: '#cfe6dc',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
-                  whiteSpace: 'nowrap',
-                  maxWidth: '120px',
-                  flexShrink: 0
+                  flex: 'none'
                 }}>
                   {segment.name}
                 </div>
@@ -195,7 +199,7 @@ export default function PieChart({ data, columns, numericColumns }) {
                   flex: 1,
                   height: '0px',
                   borderBottom: '1px dotted rgba(255,255,255,0.18)',
-                  margin: '0 8px'
+                  margin: '0 4px'
                 }}></span>
 
                 {/* Value */}
@@ -203,7 +207,7 @@ export default function PieChart({ data, columns, numericColumns }) {
                   fontSize: '13px',
                   color: '#f6fffb',
                   fontWeight: '600',
-                  flexShrink: 0
+                  flex: 'none'
                 }}>
                   {segment.value.toLocaleString()}
                 </div>
@@ -214,9 +218,9 @@ export default function PieChart({ data, columns, numericColumns }) {
                   color: segment.color,
                   width: '40px',
                   textAlign: 'right',
-                  flexShrink: 0
+                  flex: 'none'
                 }}>
-                  {segment.percentage.toFixed(1)}%
+                  {Math.round(segment.percentage)}%
                 </div>
               </div>
             ))}
