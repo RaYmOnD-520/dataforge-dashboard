@@ -92,7 +92,7 @@ async def analyze_quality(request: QualityRequest):
         preview_df = pd.DataFrame(request.preview)
         duplicate_rows = 0
         if len(preview_df) > 0:
-            duplicates_in_preview = preview_df.duplicated().sum()
+            duplicates_in_preview = int(preview_df.duplicated().sum())
             # Estimate total duplicates proportionally
             if len(preview_df) > 0:
                 duplicate_rows = int((duplicates_in_preview / len(preview_df)) * request.row_count)
@@ -103,14 +103,14 @@ async def analyze_quality(request: QualityRequest):
 
             # Get null count from summary_stats or calculate from preview
             if is_numeric and col in request.summary_stats:
-                null_count = request.summary_stats[col].get('null_count', 0)
+                null_count = int(request.summary_stats[col].get('null_count', 0))
             else:
                 # For text columns, estimate from preview
-                null_count_preview = preview_df[col].isna().sum() if col in preview_df.columns else 0
+                null_count_preview = int(preview_df[col].isna().sum()) if col in preview_df.columns else 0
                 null_count = int((null_count_preview / len(preview_df)) * request.row_count) if len(preview_df) > 0 else 0
 
             total_null_count += null_count
-            null_percent = round((null_count / request.row_count * 100), 1) if request.row_count > 0 else 0.0
+            null_percent = float(round((null_count / request.row_count * 100), 1)) if request.row_count > 0 else 0.0
 
             # Determine status
             if null_percent < 5:
@@ -129,37 +129,37 @@ async def analyze_quality(request: QualityRequest):
 
                 # Calculate standard deviation from preview
                 if col in preview_df.columns and len(preview_df[col].dropna()) > 0:
-                    std = preview_df[col].std()
+                    std = float(preview_df[col].std())
                     if mean is not None and max_val is not None and std is not None and std > 0:
-                        has_outliers = max_val > (mean + 3 * std)
+                        has_outliers = bool(max_val > (mean + 3 * std))
                         if has_outliers:
                             outlier_count += 1
 
             col_info = {
-                "name": col,
+                "name": str(col),
                 "dtype": "numeric" if is_numeric else "text",
-                "null_count": null_count,
-                "null_percent": null_percent,
-                "status": status
+                "null_count": int(null_count),
+                "null_percent": float(null_percent),
+                "status": str(status)
             }
 
             if is_numeric:
-                col_info["has_outliers"] = has_outliers
+                col_info["has_outliers"] = bool(has_outliers)
 
             columns_info.append(col_info)
 
         # Calculate overall score
-        total_null_percent = (total_null_count / total_cells * 100) if total_cells > 0 else 0
-        outlier_penalty = outlier_count * 5  # 5 points penalty per column with outliers
+        total_null_percent = float((total_null_count / total_cells * 100)) if total_cells > 0 else 0.0
+        outlier_penalty = int(outlier_count * 5)  # 5 points penalty per column with outliers
         overall_score = int(max(0, min(100, 100 - total_null_percent - outlier_penalty)))
 
-        total_issues = sum(1 for col in columns_info if col['status'] in ['warning', 'critical'])
+        total_issues = int(sum(1 for col in columns_info if col['status'] in ['warning', 'critical']))
 
         return {
-            "overall_score": overall_score,
-            "total_rows": request.row_count,
-            "duplicate_rows": duplicate_rows,
-            "total_issues": total_issues,
+            "overall_score": int(overall_score),
+            "total_rows": int(request.row_count),
+            "duplicate_rows": int(duplicate_rows),
+            "total_issues": int(total_issues),
             "columns": columns_info
         }
 

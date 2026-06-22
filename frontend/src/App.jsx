@@ -5,6 +5,7 @@ import StatsPanel from './components/StatsPanel'
 import BarChart from './components/BarChart'
 import LineChart from './components/LineChart'
 import PieChart from './components/PieChart'
+import QualityReport from './components/QualityReport'
 
 function App() {
   const [uploadedData, setUploadedData] = useState(null)
@@ -493,6 +494,29 @@ function App() {
                   )}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Data Quality Report Section */}
+          {uploadedData && (
+            <div style={{marginBottom: '46px'}}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '18px'}}>
+                <span style={{
+                  width: '5px',
+                  height: '18px',
+                  borderRadius: '3px',
+                  background: 'linear-gradient(180deg, #34e0a1, #0e9e8e)'
+                }}></span>
+                <h2 style={{
+                  margin: 0,
+                  fontFamily: "'Space Grotesk', sans-serif",
+                  fontWeight: 600,
+                  fontSize: '18px',
+                  color: '#eef6f1',
+                  letterSpacing: '-0.3px'
+                }}>Data Quality Report</h2>
+              </div>
+              <QualityReport data={uploadedData} />
             </div>
           )}
         </div>
