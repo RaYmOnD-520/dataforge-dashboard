@@ -14,6 +14,55 @@ export default function DataTable({ data, columns }) {
     return !isNaN(parseFloat(value)) && isFinite(value)
   }
 
+  // Determine if each column is numeric by checking the first few non-null values
+  const numericColumns = new Set()
+  columns.forEach(column => {
+    const sampleValues = data.slice(0, 20).map(row => row[column]).filter(v => v !== null && v !== undefined)
+    if (sampleValues.length > 0 && sampleValues.every(v => isNumeric(v))) {
+      numericColumns.add(column)
+    }
+  })
+
+  // Map column names to specific widths
+  const getColumnWidth = (columnName) => {
+    const upperName = columnName.trim().toUpperCase()
+    switch (upperName) {
+      case 'NAME':
+        return '25%'
+      case 'AGE':
+        return '10%'
+      case 'SALARY':
+        return '20%'
+      case 'DEPARTMENT':
+        return '30%'
+      default:
+        return 'auto'
+    }
+  }
+
+  // Get text alignment for column
+  const getColumnAlignment = (columnName) => {
+    return 'center'
+  }
+
+  // Get custom padding for column
+  const getColumnPadding = (columnName) => {
+    const upperName = columnName.trim().toUpperCase()
+    if (upperName === 'DEPARTMENT') {
+      return '13px 8px' // reduced left and right padding
+    }
+    return '13px 18px'
+  }
+
+  // Get custom header padding for column
+  const getHeaderPadding = (columnName) => {
+    const upperName = columnName.trim().toUpperCase()
+    if (upperName === 'DEPARTMENT') {
+      return '14px 8px' // reduced left and right padding
+    }
+    return '14px 18px'
+  }
+
   return (
     <div className="w-full">
       <div
@@ -36,14 +85,15 @@ export default function DataTable({ data, columns }) {
                   key={index}
                   className="font-mono"
                   style={{
-                    textAlign: 'left',
-                    padding: '14px 18px',
+                    textAlign: getColumnAlignment(column),
+                    padding: getHeaderPadding(column),
                     fontSize: '11px',
                     fontWeight: '600',
                     letterSpacing: '0.6px',
                     color: '#34e0a1',
                     borderBottom: '1px solid rgba(52,224,161,0.2)',
-                    textTransform: 'uppercase'
+                    textTransform: 'uppercase',
+                    width: getColumnWidth(column)
                   }}
                 >
                   {column}
@@ -65,16 +115,16 @@ export default function DataTable({ data, columns }) {
               >
                 {columns.map((column, colIndex) => {
                   const value = row[column]
-                  const isNum = value !== null && value !== undefined && isNumeric(value)
                   return (
                     <td
                       key={colIndex}
                       className="font-mono"
                       style={{
-                        padding: '13px 18px',
+                        padding: getColumnPadding(column),
                         fontSize: '13px',
                         color: '#e6f3ec',
-                        textAlign: isNum ? 'right' : 'left'
+                        textAlign: getColumnAlignment(column),
+                        width: getColumnWidth(column)
                       }}
                     >
                       {value !== null && value !== undefined ? String(value) : '—'}
